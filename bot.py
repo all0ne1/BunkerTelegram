@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.enums import ParseMode
-from config import TOKEN
+from configs.config import TOKEN
 from handlers import JoinGame, main_chat, InGameHandler
 
 

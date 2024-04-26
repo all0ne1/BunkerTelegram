@@ -2,6 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+configs/__pycache__/
+handlers/__pycache__/
+keyboards/__pycache__/
+StateGroup/__pycache__/
 
 # C extensions
 *.so

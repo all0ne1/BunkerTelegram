@@ -18,20 +18,22 @@ async def create_callback_handler(query: types.CallbackQuery, state: FSMContext)
     game_id = generate_game_id()
     lobbies[game_id].add_player(query.from_user.id)
     lobbies[game_id].game_id = game_id
+    lobbies[game_id].make_host(query.from_user.id)
+    lobbies[game_id].set_state(JoinGame.joined)
     lobby_to_user_id[query.from_user.id] = game_id
     await query.message.answer(f"Игра создана! ID игры: {game_id}")
-    await state.set_state(JoinGame.join)
+    await state.set_state(JoinGame.joined)
 
 
 @router.callback_query(lambda query: query.data == "/join")
 async def join_callback_handler(query: types.CallbackQuery, state: FSMContext) -> None:
     await query.bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-    if await state.get_state() != JoinGame.join:
+    if await state.get_state() != JoinGame.joined:
         await query.message.answer("Введите ID игры, к который в хотите присоединиться")
         await state.set_state(JoinGame.waiting_for_game_id)
     else:
         await query.message.answer(f"Вы уже находитель в игре {lobby_to_user_id.get(query.from_user.id)}")
-        await state.set_state(JoinGame.join)
+        await state.set_state(JoinGame.joined)
 
 
 @router.message(JoinGame.waiting_for_game_id)
@@ -52,18 +54,19 @@ async def process_join(message: types.Message, state: FSMContext) -> None:
                     try:
                         player = await message.bot.get_chat(player_id)
                         await message.bot.send_message(player.id, f'Игрок {new_player_name} присоединился к игре!')
-                        await state.set_state(JoinGame.join)
+                        await state.set_state(JoinGame.joined)
                     except Exception as e:
                         print(f"Ошибка при отправке сообщения игроку {player_id}: {e}")
                 else:
                     try:
                         player = await message.bot.get_chat(player_id)
                         await message.bot.send_message(player.id, f'Вы присоединились к игре {game_id}')
-                        await state.set_state(JoinGame.join)
+                        await state.set_state(JoinGame.joined)
                     except Exception as e:
                         print(f"Ошибка при отправке сообщения игроку {player_id}: {e}")
                 await message.bot.send_message(player_id, f"Сейчас в лобби {len(lobbies[game_id].players)} игроков."
-                                                          f" Для начала игры необходимо еще минимум {6 - len(lobbies[game_id].players)}")
+                                                          f" Для начала игры необходимо еще минимум"
+                                                          f" {6 - len(lobbies[game_id].players)}")
         else:
             await message.answer('Игра с таким ID не найдена. Введите заново')
             await state.set_state(JoinGame.waiting_for_game_id)

@@ -9,7 +9,9 @@ from aiogram.fsm.state import default_state
 
 router = Router()
 
-@router.message(Command('start'))
+
+
+@router.message(Command('start') and default_state)
 async def start_handler(message: Message) -> None:
     await message.answer(f"Hello, {hbold(message.from_user.full_name)}!", reply_markup=build_start_keyboard())
 

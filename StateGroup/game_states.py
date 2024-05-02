@@ -5,5 +5,5 @@ class game_states(StatesGroup):
     in_lobby = State()
     in_game = State()
     in_game_speaker = State()
-    in_game_not_speaker = State()
     choice_card_to_show = State()
+    vote_for_kick = State()

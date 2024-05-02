@@ -1,3 +1,6 @@
+import queue
+
+from configs.player import Player
 class Lobby:
     def __init__(self):
         self.players = []
@@ -7,7 +10,21 @@ class Lobby:
         self.speaker = 0
         self.cur_speaker_index = 0
         self.state = None
+        self.player_stats = {}
+        self.votes_for_players = {}
 
+
+    def reset_votes_for_kick(self):
+        self.votes_for_players = {}
+
+    def add_player_stats(self,id,Player: Player):
+        self.player_stats[id] = Player
+
+    def reset_speaker_index(self):
+        self.cur_speaker_index = 0
+
+    def get_player_stats(self,key) -> Player:
+        return self.player_stats.get(key)
 
     def get_speaker_index(self):
         return self.cur_speaker_index
@@ -20,6 +37,9 @@ class Lobby:
 
     def make_host(self, host):
         self.host = host
+
+    def get_host(self):
+        return self.host
 
     def set_state(self, state):
         self.state = state

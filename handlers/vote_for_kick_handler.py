@@ -4,13 +4,11 @@ import re
 
 from aiogram import types, Router
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.storage.base import StorageKey
 
 
 from configs.config import lobbies
 from configs.config import lobby_to_user_id
 from configs.config import id_to_nick
-from keyboards import choice_card, vote_keyboard
 from StateGroup.game_states import game_states
 
 
@@ -28,10 +26,8 @@ def get_most_voted_player(votes_for_players):
 async def vote_for_kick(query: types.CallbackQuery, state: FSMContext):
     game_id = lobby_to_user_id.get(query.from_user.id)
     current_lobby = lobbies.get(game_id)
-    # Extracting player ID directly from callback_data
     player_id = query.data.split("_")[1]
     selected_player = id_to_nick.get(int(player_id))
-    # Ensure the selected player ID is valid and voting structure is correct
     if selected_player:
         if current_lobby.votes_for_players.get(selected_player):
             current_lobby.votes_for_players[selected_player].append(query.from_user.id)

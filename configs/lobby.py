@@ -17,8 +17,8 @@ class Lobby:
     def reset_votes_for_kick(self):
         self.votes_for_players = {}
 
-    def add_player_stats(self,id,Player: Player):
-        self.player_stats[id] = Player
+    def add_player_stats(self,id):
+        self.player_stats[id] = Player(game_id=self.game_id)
 
     def reset_speaker_index(self):
         self.cur_speaker_index = 0

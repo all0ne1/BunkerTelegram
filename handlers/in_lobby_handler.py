@@ -42,7 +42,7 @@ async def start_game(query: types.CallbackQuery, state: FSMContext):
     for player_id in lobbies[game_id].players:
         player_key = StorageKey(bot_id=query.bot.id, user_id=player_id,chat_id=player_id)
         player_context = FSMContext(key=player_key, storage=state.storage)
-        lobbies[game_id].add_player_stats(player_id, Player(game_id))
+        lobbies[game_id].add_player_stats(player_id)
         player = lobbies[game_id].player_stats.get(player_id)
         await player_context.set_state(game_states.in_game)
         await query.message.bot.send_message(player_id, f"Игра {game_id} началась!")

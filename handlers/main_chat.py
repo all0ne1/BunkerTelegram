@@ -13,7 +13,6 @@ from aiogram.fsm.state import default_state
 router = Router()
 
 
-
 @router.message(Command('start'))
 async def start_handler(message: types.Message, state: FSMContext) -> None:
     if re.match(r"/start join_lobby_\d+", message.text):

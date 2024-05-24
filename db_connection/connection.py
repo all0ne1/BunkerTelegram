@@ -1,17 +1,18 @@
 import sqlite3
-import queue
 
 
-def get_from_db(query: str):
+def get_from_db(query: str, fetch_all: bool = False):
     conn = sqlite3.connect('db_connection/bunker_telegram.db')
     cursor = conn.cursor()
     res = cursor.execute(query)
     conn.commit()
-    result = res.fetchone()
+    if fetch_all:
+        result = res.fetchall()
+    else:
+        result = res.fetchone()
     cursor.close()
     conn.close()
     return result
-
 
 
 def delete_table(game_id: int) -> None:
@@ -21,8 +22,3 @@ def delete_table(game_id: int) -> None:
     conn.commit()
     cursor.close()
     conn.close()
-
-
-
-
-

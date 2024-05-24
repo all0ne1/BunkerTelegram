@@ -8,7 +8,6 @@ def kick_keyboard(lobby: Lobby) -> InlineKeyboardMarkup:
     for player_id in lobby.players:
         nick = id_to_nick.get(player_id)
         button = InlineKeyboardButton(text=nick, callback_data=f"player_{player_id}")
-        print(player_id)
         keyboard.append([button])
     inline_markup = InlineKeyboardMarkup(inline_keyboard=keyboard, resize_keyboard=True)
     return inline_markup

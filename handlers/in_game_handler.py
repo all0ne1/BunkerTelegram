@@ -128,7 +128,7 @@ async def speak(message: types.Message, state: FSMContext):
                 await state.set_state(GameStates.in_game)
 
 
-async def timer(duration=1):
+async def timer(duration=30):
     await asyncio.sleep(duration)
 
 

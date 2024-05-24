@@ -86,14 +86,14 @@ async def handle_vote(query: types.CallbackQuery, state: FSMContext, selected_pl
                 current_lobby.set_state(GameStates.revote)
                 current_lobby.revote_done = True
                 for player_id in current_lobby.players:
-                    #if id_to_nick.get(player_id) not in most_voted_player:
+                    if id_to_nick.get(player_id) not in most_voted_player:
                         await query.bot.send_message(player_id,
                                                      "Голоса разделились. Проголосуйте снова между этими игроками:",
                                                      reply_markup=revote_keyboard(most_voted_player))
                         await change_one_player_state(player_id, state, GameStates.revote)
                         current_lobby.reset_votes_for_kick()
-                    #else:
-                        #await query.bot.send_message(player_id, "Идет переголосование")
+                    else:
+                        await query.bot.send_message(player_id, "Идет переголосование")
             else:
                 vote_stats = "\n".join([f"{id_to_nick[voter]} проголосовал за {player}"
                                         for player, voters in current_lobby.votes_for_players.items()
